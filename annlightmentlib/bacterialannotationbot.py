@@ -26,7 +26,7 @@ class BacterialAnnotationBot():
         logfile = open(self.annotation_file, 'r')
         interaction_counter = 0
         for line in logfile.readlines():
-                if line.startswith("INFO:root:no matching transcript"):
+                if line.startswith("INFO:root:interaction("):
                     interaction_counter += 1
                     #split_line = line.split("|")
                     #print(split_line[1])
@@ -647,33 +647,9 @@ class BacterialAnnotationBot():
                                                    specs["sRNA_end_pos"],
                                                    specs["entry_id"]))
                 specs = self._process_interactions_row(row)
+                
                 for transcript_ID in matching_transcript_IDs:
-                    if self._check_if_claim_exists(
-                            sRNA_item_id, "RNAplex",
-                            specs["start_pos_sRNA_plex"],
-                            specs["end_pos_sRNA_plex"],
-                            transcript_ID,
-                            specs["start_pos_target_plex"],
-                            specs["end_pos_target_plex"]):
-                        print("interaction (RNAplex) between sRNA {} "
-                              "and transcript {} already exists".format(
-                                  sRNA_item_id, transcript_ID))
-                        self._make_log_entry_interaction_exists(
-                            "plex", sRNA_item_id, transcript_ID)
-                    elif not self._check_if_claim_exists(
-                            sRNA_item_id, "RNAplex",
-                            specs["start_pos_sRNA_plex"],
-                            specs["end_pos_sRNA_plex"],
-                            transcript_ID,
-                            specs["start_pos_target_plex"],
-                            specs["end_pos_target_plex"]):                    
-                        print("created interaction (RNAplex) between "
-                                  "sRNA {} "
-                                  "and transcript {}".format(sRNA_item_id,
-                                                             transcript_ID))
-                        self._make_log_entry_create_interaction(
-                            "plex", sRNA_item_id, transcript_ID)
-                        self.number_of_uploaded_items['interactions'] += 1
+                    try:
                         self._add_claim_item_qualifier(
                             sRNA_item_id, specs["claim"], transcript_ID,
                             specs["quali_start"],
@@ -688,32 +664,20 @@ class BacterialAnnotationBot():
                             specs["end_pos_target_plex"],
                             specs["quali_method"],
                             property_dict["RNAplex"])
-                    if self._check_if_claim_exists(
-                            sRNA_item_id, "RNAup",
-                            specs["start_pos_sRNA_up"],
-                            specs["end_pos_sRNA_up"],
-                            transcript_ID,
-                            specs["start_pos_target_up"],
-                            specs["end_pos_target_up"]):
-                        print("interaction (RNAup) between sRNA {} "
+                        print("created interaction (RNAplex) between "
+                              "sRNA {} "
+                              "and transcript {}".format(sRNA_item_id,
+                                                         transcript_ID))
+                        self._make_log_entry_create_interaction(
+                            "plex", sRNA_item_id, transcript_ID)
+                    except:
+                        print("interaction (RNAplex) between sRNA {} "
                               "and transcript {} already exists".format(
                                   sRNA_item_id, transcript_ID))
                         self._make_log_entry_interaction_exists(
-                            "up", sRNA_item_id, transcript_ID)
-                    elif not self._check_if_claim_exists(
-                            sRNA_item_id,
-                            "RNAup", specs["start_pos_sRNA_up"],
-                            specs["end_pos_sRNA_up"],
-                            transcript_ID,
-                            specs["start_pos_target_up"],
-                            specs["end_pos_target_up"]):
-                        print("created interaction (RNAup) between "
-                              "sRNA {} and transcript {}".format(
-                                  sRNA_item_id, transcript_ID))
-                        self._make_log_entry_create_interaction(
-                            "up", sRNA_item_id, transcript_ID)
-                        self.number_of_uploaded_items[
-                            'interactions'] += 1
+                            "plex", sRNA_item_id, transcript_ID)
+
+                    try:
                         self._add_claim_item_qualifier(
                             sRNA_item_id, specs["claim"],
                             transcript_ID, specs["quali_start"],
@@ -730,7 +694,20 @@ class BacterialAnnotationBot():
                             specs["end_pos_target_up"],
                             specs["quali_method"],
                             property_dict["RNAup"])
-                                
+                        print("created interaction (RNAup) between "
+                              "sRNA {} and transcript {}".format(
+                                  sRNA_item_id, transcript_ID))
+                        self._make_log_entry_create_interaction(
+                            "up", sRNA_item_id, transcript_ID)
+                        self.number_of_uploaded_items[
+                            'interactions'] += 1
+                    except:
+                        print("interaction (RNAup) between sRNA {} "
+                              "and transcript {} already exists".format(
+                                  sRNA_item_id, transcript_ID))
+                        self._make_log_entry_interaction_exists(
+                            "up", sRNA_item_id, transcript_ID)
+                        
     def _process_interactions_row(self, row):
         property_dict = self._get_property_dict()
         #target_locus_tag_and_short_name = row['target_locus_tag']
