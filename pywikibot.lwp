@@ -1,0 +1,4 @@
+#LWP-Cookies-2.0
+Set-Cookie3: tills_wikiToken=bad4ce4176f110291bac3285f834d7c3; path="/"; domain="wrzh182.rzhousing.uni-wuerzburg.de"; path_spec; secure; expires="2017-04-24 12:28:44Z"; httponly=None; version=0
+Set-Cookie3: tills_wikiUserID=2; path="/"; domain="wrzh182.rzhousing.uni-wuerzburg.de"; path_spec; secure; expires="2017-04-24 12:28:44Z"; httponly=None; version=0
+Set-Cookie3: tills_wikiUserName=BacterialAnnotationBot; path="/"; domain="wrzh182.rzhousing.uni-wuerzburg.de"; path_spec; secure; expires="2017-04-24 12:28:44Z"; httponly=None; version=0

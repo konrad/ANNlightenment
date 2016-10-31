@@ -1,0 +1,7 @@
+import unittest
+import annlightmentlib.bac
+
+class TestSometing(unittest.TestCase):
+
+    def test_mope(self):
+        self.assertEqual(annlightmentlib.bac.return_x(1), 2)
