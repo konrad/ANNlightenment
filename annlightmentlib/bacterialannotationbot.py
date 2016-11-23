@@ -793,9 +793,10 @@ class BacterialAnnotationBot():
                              "transfer RNA": "Q201448",
                              "TSS": "Q2449354", "part of": "P361",
                              "RefSeq": "Q7307074",
-                             "transcript": "Q26944990", "stated in": "P248"}
+                             "transcript": "Q26944990", "stated in": "P248",
+                             "RNAplex": "Q27907827", "RNAup": "Q27907828"}
             return(property_dict)
-         #RNAup and plex still missing on Wikidata, ANNOgesic also missing on Wikidata                          
+                       
     def _add_claim_string(self, item_id, claim, target):
         new_item = pywikibot.ItemPage(self.repo, item_id) 
         claim = pywikibot.Claim(self.repo, claim)
