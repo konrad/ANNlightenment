@@ -1,5 +1,5 @@
 import unittest
-from annlightmentlib.bacterialannotationbot import BacterialAnnotationBot 
+from annlightenmentlib.bacterialannotationbot import BacterialAnnotationBot 
 
 class TestLabelDescriptionData(unittest.TestCase):
 
