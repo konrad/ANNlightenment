@@ -6,7 +6,7 @@ import pywikibot
 from pywikibot.data import api
 import sys
 import time
-from annlightmentlib.gff3parser import Gff3Parser
+from annlightenmentlib.gff3parser import Gff3Parser
 
 class BacterialAnnotationBot():
 
@@ -22,31 +22,7 @@ class BacterialAnnotationBot():
         self.id_locus_tag_dict = defaultdict(dict)
         self.number_of_uploaded_items = defaultdict(int)
 
-    def test(self):
-    #     logfile = open(self.annotation_file, 'r')
-    #     interaction_counter = 0
-    #     for line in logfile.readlines():
-    #             if line.startswith("INFO:root:no matching transcript"):
-    #                 interaction_counter += 1
-    #                 #split_line = line.split("|")
-    #                 #print(split_line[1])
-    #                 print(line)
-    #     print(interaction_counter)
-        double_locus_tags = []
-        with open(self.annotation_file) as csv_file: 
-            gff_parser = Gff3Parser()
-            gff_iterator = gff_parser.entries(csv_file)
-            for row in gff_iterator:
-                if row.feature == "CDS":
-                    # if row.attributes["locus_tag"] not in double_locus_tags:
-                    #     double_locus_tags.append(row.attributes["locus_tag"])
-                    #     #print("append")
-                    # elif row.attributes["locus_tag"] in double_locus_tags:
-                    #     print(row.attributes["locus_tag"])
-                    #     print(row)
-                    if row.attributes["locus_tag"] == "SAOUHSC_01679":
-                        print(row)
-                          
+
     def _get_strain_name(self, strain_id):
         strain_item = pywikibot.ItemPage(self.repo, strain_id) 
         strain_item_dict = strain_item.get()
@@ -55,7 +31,7 @@ class BacterialAnnotationBot():
 
     def _make_log_entry_no_transcript(self, ncRNA_name, targets_locus_tag):
         timestr = time.strftime("%Y%m%d-%H_%M_%S")
-        logging.basicConfig(filename='ANNlightment_' + timestr +
+        logging.basicConfig(filename='ANNlightenment_' + timestr +
                             '.log', level=logging.DEBUG)
         logging.info("no matching transcript for ncRNA {} and targets locus "
                      "tag {}".format(ncRNA_name, targets_locus_tag))
@@ -64,7 +40,7 @@ class BacterialAnnotationBot():
     def _make_log_entry_interaction_exists(
             self, method, ncRNA_ID, transcript_ID):
         timestr = time.strftime("%Y%m%d-%H_%M_%S")
-        logging.basicConfig(filename='ANNlightment_' + timestr +
+        logging.basicConfig(filename='ANNlightenment_' + timestr +
                             '.log', level=logging.DEBUG)
         logging.info("interaction({}) between ncRNA {} and "
                      "transcript {} already exists".format(
@@ -73,14 +49,14 @@ class BacterialAnnotationBot():
     def _make_log_entry_create_interaction(
             self, method, ncRNA_ID, transcript_ID):
         timestr = time.strftime("%Y%m%d-%H_%M_%S")
-        logging.basicConfig(filename='ANNlightment_' + timestr +
+        logging.basicConfig(filename='ANNlightenment_' + timestr +
                             '.log', level=logging.DEBUG)
         logging.info("created interaction({}) between ncRNA {} and "
                      "transcript {}".format(method, ncRNA_ID, transcript_ID))
     
     def _make_log_entry(self, item_type, new_item_id):
         timestr = time.strftime("%Y%m%d-%H_%M_%S")
-        logging.basicConfig(filename='ANNlightment_' + timestr +
+        logging.basicConfig(filename='ANNlightenment_' + timestr +
                             '.log', level=logging.DEBUG)
         logging.info("created {} item with ID {}".format(item_type,
                                                          new_item_id))
@@ -138,7 +114,8 @@ class BacterialAnnotationBot():
     def print_overview(self):
         sum_of_items = (sum(self.number_of_uploaded_items.values()) -
                         self.number_of_uploaded_items['interactions'])     
-        print("ANNlightment uploaded a total of {} items".format(sum_of_items))
+        print("ANNlightenment uploaded a total of {} "
+              "items".format(sum_of_items))
         print(" {} genes, \n {} rRNAs, \n {} tRNAs, \n {} proteins, \n {} TSS,"
               "\n {} ncRNAs, \n {} transcripts derived from ANNOgesic \n "
               "{} transcripts derived from RefSeq and \n {} "
@@ -427,18 +404,7 @@ class BacterialAnnotationBot():
         new_item.editAliases(newalias, summary="Setting new aliases.")
                 
     def create_relating_claims(self):
-        # matching_IDs = self._get_matching_IDs_dict()
-        # pprint.pprint(matching_IDs)
-        # property_dict = self._get_property_dict()
-        # for gene_ID, product_ID in matching_IDs.items():            
-        #     self._add_claim_item(gene_ID, property_dict["encodes"], product_ID)
-        #     self._add_claim_item(product_ID, property_dict["encoded by"],
-        #                          gene_ID)
-        #     print("connected gene {} with product {}".format(gene_ID,
-        #                                                      product_ID))
-
         matching_IDs = self._get_matching_IDs_dict()
-        pprint.pprint(matching_IDs)
         property_dict = self._get_property_dict()
         for gene_ID, product_IDs in matching_IDs.items():
             for product_ID in product_IDs:
@@ -450,20 +416,6 @@ class BacterialAnnotationBot():
                                                                  product_ID)) 
             
     def _get_matching_IDs_dict(self):
-#         id_locus_tag_dict = self.id_locus_tag_dict
-#         matching_IDs = {}
-#         for item in id_locus_tag_dict.items():
-#             if (item[1]["feature_type"] == "gene" and
-#                 item[1]["locus_tag"] != "NA"):
-#                 for item2 in id_locus_tag_dict.items():
-#                     if item2[1]["locus_tag"] != "NA":
-#                         if (item2[1]["locus_tag"] == item[1]["locus_tag"] and
-#                             item2[0] != item[0] and
-#                             item2[0] not in matching_IDs and
-#                             item[0] not in matching_IDs):
-#                             matching_IDs[item[0]] = item2[0]
-# #matching_IDs dict will have the gene as a key and the product as a value
-#         return(matching_IDs)
         id_locus_tag_dict = self.id_locus_tag_dict
         matching_IDs = {}
         for item in id_locus_tag_dict.items():
@@ -472,7 +424,7 @@ class BacterialAnnotationBot():
                 cds_list = []
                 for item2 in id_locus_tag_dict.items():
                     if (item2[1]["locus_tag"] != "NA" and
-                        item2[1]["feature_type"] == "protein"):
+                        item2[1]["feature_type"] in ["protein", "rRNA", "tRNA"]): 
                         if (item2[1]["locus_tag"] == item[1]["locus_tag"] and
                             item2[0] != item[0]):
                             cds_list.append(item2[0])
@@ -647,33 +599,9 @@ class BacterialAnnotationBot():
                                                    specs["sRNA_end_pos"],
                                                    specs["entry_id"]))
                 specs = self._process_interactions_row(row)
+                
                 for transcript_ID in matching_transcript_IDs:
-                    if self._check_if_claim_exists(
-                            sRNA_item_id, "RNAplex",
-                            specs["start_pos_sRNA_plex"],
-                            specs["end_pos_sRNA_plex"],
-                            transcript_ID,
-                            specs["start_pos_target_plex"],
-                            specs["end_pos_target_plex"]):
-                        print("interaction (RNAplex) between sRNA {} "
-                              "and transcript {} already exists".format(
-                                  sRNA_item_id, transcript_ID))
-                        self._make_log_entry_interaction_exists(
-                            "plex", sRNA_item_id, transcript_ID)
-                    elif not self._check_if_claim_exists(
-                            sRNA_item_id, "RNAplex",
-                            specs["start_pos_sRNA_plex"],
-                            specs["end_pos_sRNA_plex"],
-                            transcript_ID,
-                            specs["start_pos_target_plex"],
-                            specs["end_pos_target_plex"]):                    
-                        print("created interaction (RNAplex) between "
-                                  "sRNA {} "
-                                  "and transcript {}".format(sRNA_item_id,
-                                                             transcript_ID))
-                        self._make_log_entry_create_interaction(
-                            "plex", sRNA_item_id, transcript_ID)
-                        self.number_of_uploaded_items['interactions'] += 1
+                    try:
                         self._add_claim_item_qualifier(
                             sRNA_item_id, specs["claim"], transcript_ID,
                             specs["quali_start"],
@@ -688,32 +616,20 @@ class BacterialAnnotationBot():
                             specs["end_pos_target_plex"],
                             specs["quali_method"],
                             property_dict["RNAplex"])
-                    if self._check_if_claim_exists(
-                            sRNA_item_id, "RNAup",
-                            specs["start_pos_sRNA_up"],
-                            specs["end_pos_sRNA_up"],
-                            transcript_ID,
-                            specs["start_pos_target_up"],
-                            specs["end_pos_target_up"]):
-                        print("interaction (RNAup) between sRNA {} "
+                        print("created interaction (RNAplex) between "
+                              "sRNA {} "
+                              "and transcript {}".format(sRNA_item_id,
+                                                         transcript_ID))
+                        self._make_log_entry_create_interaction(
+                            "plex", sRNA_item_id, transcript_ID)
+                    except:
+                        print("interaction (RNAplex) between sRNA {} "
                               "and transcript {} already exists".format(
                                   sRNA_item_id, transcript_ID))
                         self._make_log_entry_interaction_exists(
-                            "up", sRNA_item_id, transcript_ID)
-                    elif not self._check_if_claim_exists(
-                            sRNA_item_id,
-                            "RNAup", specs["start_pos_sRNA_up"],
-                            specs["end_pos_sRNA_up"],
-                            transcript_ID,
-                            specs["start_pos_target_up"],
-                            specs["end_pos_target_up"]):
-                        print("created interaction (RNAup) between "
-                              "sRNA {} and transcript {}".format(
-                                  sRNA_item_id, transcript_ID))
-                        self._make_log_entry_create_interaction(
-                            "up", sRNA_item_id, transcript_ID)
-                        self.number_of_uploaded_items[
-                            'interactions'] += 1
+                            "plex", sRNA_item_id, transcript_ID)
+
+                    try:
                         self._add_claim_item_qualifier(
                             sRNA_item_id, specs["claim"],
                             transcript_ID, specs["quali_start"],
@@ -730,12 +646,22 @@ class BacterialAnnotationBot():
                             specs["end_pos_target_up"],
                             specs["quali_method"],
                             property_dict["RNAup"])
-                                
+                        print("created interaction (RNAup) between "
+                              "sRNA {} and transcript {}".format(
+                                  sRNA_item_id, transcript_ID))
+                        self._make_log_entry_create_interaction(
+                            "up", sRNA_item_id, transcript_ID)
+                        self.number_of_uploaded_items[
+                            'interactions'] += 1
+                    except:
+                        print("interaction (RNAup) between sRNA {} "
+                              "and transcript {} already exists".format(
+                                  sRNA_item_id, transcript_ID))
+                        self._make_log_entry_interaction_exists(
+                            "up", sRNA_item_id, transcript_ID)
+                        
     def _process_interactions_row(self, row):
         property_dict = self._get_property_dict()
-        #target_locus_tag_and_short_name = row['target_locus_tag']
-        #target_list = target_locus_tag_and_short_name.split('|')
-        
         both_genome_positions_plex = row['sRNA_interacted_position_RNAplex']
         genome_pos_list_plex = both_genome_positions_plex.split("-")
         both_target_positions_plex = row['target_interacted_position_RNAplex']
@@ -752,7 +678,6 @@ class BacterialAnnotationBot():
         targets_locus_tag = targets_locus_tag_and_short_name[0]
         trgt_gene_entry_id = row["target_gene_ID"]
         specs = {
-            #"sRNA_locus_tag": target_list[0],
             "start_pos_sRNA_plex": genome_pos_list_plex[0],
             "end_pos_sRNA_plex": genome_pos_list_plex[1],
             "start_pos_target_plex": target_pos_list_plex[0],
@@ -828,76 +753,7 @@ class BacterialAnnotationBot():
                 if instance_of_target_id == property_dict["transcript"]:
                     ids_of_transcripts.append(ID)                   
         return(ids_of_transcripts)                       
-                                   
-    def _check_if_claim_exists(
-            self, sRNA_item_id, given_method, start_pos_sRNA_given_method,
-            end_pos_sRNA_given_method, transcript_id,
-            start_pos_trans_given_method, end_pos_trans_given_method):
-        property_dict = self._get_property_dict()        
-        given_quadruple_sRNA_list = [
-            start_pos_sRNA_given_method, end_pos_sRNA_given_method,
-            given_method, transcript_id]
-        sRNA_item = pywikibot.ItemPage(self.repo, sRNA_item_id)
-        sRNA_item_dict = sRNA_item.get()
-        sRNA_clm_dict = sRNA_item_dict['claims']
-        quadruple_sRNA_claims = []
-        if property_dict["physically interacts with"] in sRNA_clm_dict:
-            physically_sRNA_claim_list = (sRNA_clm_dict[property_dict[
-                "physically interacts with"]])
-            quadruple_sRNA_claims = (
-                self._get_quadruple_claim_list(physically_sRNA_claim_list))
-
-        
-        given_quadruple_transcript_list = [
-            start_pos_trans_given_method, end_pos_trans_given_method,
-            given_method, sRNA_item_id]   
-        transcript_item = pywikibot.ItemPage(self.repo, transcript_id)
-        transcript_item_dict = transcript_item.get()
-        transcript_clm_dict = transcript_item_dict['claims']
-        quadruple_trans_claims = []
-        if property_dict["physically interacts with"] in transcript_clm_dict:
-            physically_trans_claim_list = (transcript_clm_dict[property_dict[
-                "physically interacts with"]])
-            quadruple_trans_claims = (
-                self._get_quadruple_claim_list(physically_trans_claim_list))
-
-        
-
-            
-        if (given_quadruple_sRNA_list in quadruple_sRNA_claims and
-            given_quadruple_transcript_list in quadruple_trans_claims):
-            return(True)
-        else:
-            return(False)
-
-    def _get_quadruple_claim_list(self, physically_inter_claim_list):
-        property_dict = self._get_property_dict()
-        quadruple_claim_list = []
-        for claim in physically_inter_claim_list:
-            json_clm  = claim.toJSON()
-            if (property_dict["genomic_start"] in json_clm['qualifiers'] and
-                property_dict["genomic_end"] in json_clm['qualifiers'] and
-                property_dict["determination method"] in
-                json_clm['qualifiers']):
-                method_id = json_clm['qualifiers'][property_dict[
-                    'determination method']][0]['datavalue'][
-                        'value']['numeric-id']
-                genomic_start_value = json_clm['qualifiers'][property_dict[
-                    'genomic_start']][0]['datavalue']['value']
-                genomic_end_value = json_clm['qualifiers'][property_dict[
-                    'genomic_end']][0]['datavalue']['value']
-                method_item = pywikibot.ItemPage(self.repo,
-                                                 "Q{}".format(method_id))
-                method_item_dict = method_item.get()
-                method_name = method_item_dict['labels']['en']
-                target_transcript_id = ("Q" + str(json_clm['mainsnak']
-                                                  ['datavalue']['value']
-                                                  ['numeric-id']))
-                quadruple = [genomic_start_value, genomic_end_value,
-                             method_name, target_transcript_id]
-            quadruple_claim_list.append(quadruple)
-        return quadruple_claim_list
-        
+                                           
     def _get_property_dict(self):
         if self.databank == "TillsWiki":
             property_dict = {"instance_of": "P6", "subclass_of": "P7",
@@ -938,9 +794,10 @@ class BacterialAnnotationBot():
                              "transfer RNA": "Q201448",
                              "TSS": "Q2449354", "part of": "P361",
                              "RefSeq": "Q7307074",
-                             "transcript": "Q26944990", "stated in": "P248"}
+                             "transcript": "Q26944990", "stated in": "P248",
+                             "RNAplex": "Q27907827", "RNAup": "Q27907828"}
             return(property_dict)
-         #RNAup and plex still missing on Wikidata, ANNOgesic also missing on Wikidata                          
+                       
     def _add_claim_string(self, item_id, claim, target):
         new_item = pywikibot.ItemPage(self.repo, item_id) 
         claim = pywikibot.Claim(self.repo, claim)

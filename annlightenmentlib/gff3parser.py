@@ -1,5 +1,5 @@
 import csv
-from annlightmentlib.gff3entry. import Gff3Entry
+from annlightenmentlib.gff3entry import Gff3Entry
 
 class Gff3Parser(object):
     """

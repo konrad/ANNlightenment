@@ -1,4 +1,4 @@
-import core_old.pywikibot
+import pywikibot
 
 class DeleteItems():
 
@@ -24,7 +24,7 @@ class DeleteItems():
             site = pywikibot.Site("en", "TillsWiki")
             repo = site.data_repository()
             repoitem = pywikibot.ItemPage(repo, item_id)
-            reason = "deleted by ANNlightment"
+            reason = "deleted by ANNlightenment"
             try:
                 repoitem.delete(reason, prompt=False)
                 print("Deleted item {}".format(item_id))
