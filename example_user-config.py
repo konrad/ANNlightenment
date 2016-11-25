@@ -4,8 +4,8 @@
 # to create your user-config.py file.
 
 mylang = 'en'
-family = 'TillsWiki'
-usernames['TillsWiki']['en'] = u'BacterialAnnotationBot'
+family = 'Name_of_the_Wiki'
+usernames['Name_of_the_Wiki']['en'] = u'Name_of_the_Bot_account'
 console_encoding = 'utf-8'
 put_throttle = 1
-sysopnames['TillsWiki']['en'] = u'BacterialAnnotationBot'
+sysopnames['Name_of_the_Wiki']['en'] = u'Name_of_the_Bot_account'
