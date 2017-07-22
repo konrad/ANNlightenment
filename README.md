@@ -1,6 +1,9 @@
-#About#
+# About
+
 ANNlightenment uploads bacterial annotations that originate from ANNOgesic to a given Wikibase instance.
-# Installation Guide #
+
+# Installation Guide
+
 1. Download pywikibot developper version 3.0-dev from  
 http://tools.wmflabs.org/pywikibot/  
 or use this direct link to download: tools.wmflabs.org/pywikibot/core_old.tar.gz
